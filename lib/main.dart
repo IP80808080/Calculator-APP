@@ -31,23 +31,36 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   var input = '';
   var output = '';
   var operation = '';
-
+  var hideInput = false;
+  var outputSize = 40.0;
   onButtonClick(value) {
     if (value == 'C') {
       input = '';
       output = '';
-    } else if (value == Icons.backspace_outlined) {
-      input = input.substring(0, input.length - 1);
+    } else if (value == '<') {
+      if (input.isNotEmpty) {
+        input = input.substring(0, input.length - 1);
+      }
     } else if (value == '=') {
-      var userInput = input;
-      userInput = input.replaceAll('x', "*");
-      Parser p = Parser();
-      Expression expression = p.parse(userInput);
-      ContextModel cm = ContextModel();
-      var finalValue = expression.evaluate(EvaluationType.REAL, cm);
-      output = finalValue.toString();
+      if (input.isNotEmpty) {
+        var userInput = input;
+        userInput = input.replaceAll('x', "*");
+        Parser p = Parser();
+        Expression expression = p.parse(userInput);
+        ContextModel cm = ContextModel();
+        var finalValue = expression.evaluate(EvaluationType.REAL, cm);
+        output = finalValue.toString();
+        if (output.endsWith(".0")) {
+          output = output.substring(0, output.length - 2);
+        }
+        input = output;
+        hideInput = true;
+        outputSize = 50;
+      }
     } else {
       input = input + value;
+      hideInput = false;
+      outputSize = 40;
     }
     setState(() {});
   }
@@ -77,7 +90,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        input,
+                        hideInput ? '' : input,
                         style: TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
@@ -99,7 +112,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                         Text(
                           output,
                           style: TextStyle(
-                              fontSize: 40,
+                              fontSize: outputSize,
                               color: darkMode ? Colors.green : Colors.grey),
                         )
                       ],
@@ -174,8 +187,8 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                       _buttonRounded(title: '0'),
                       _buttonRounded(title: '.'),
                       _buttonRounded(
-                          icon: Icons.backspace_outlined,
-                          iconColor:
+                          title: '<',
+                          textColor:
                               darkMode ? Colors.green : Colors.redAccent),
                       _buttonRounded(
                           title: '=',
