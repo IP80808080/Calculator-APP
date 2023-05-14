@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-const Color colorDark = Color(0xFF374352);
+const Color colorDark = Color(0xFF212121);
 const Color colorLight = Color(0xFFe6eeff);
 
 class CalculatorNeuApp extends StatefulWidget {
@@ -94,7 +94,9 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                         style: TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
-                            color: darkMode ? Colors.white : Colors.red),
+                            color: darkMode
+                                ? Color(0xffF5F5F5)
+                                : Color(0xff212121)),
                       ),
                     ),
                     SizedBox(
@@ -107,13 +109,15 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                           '=',
                           style: TextStyle(
                               fontSize: 30,
-                              color: darkMode ? Colors.green : Colors.grey),
+                              color: darkMode ? Colors.green : Colors.black),
                         ),
                         Text(
                           output,
                           style: TextStyle(
                               fontSize: outputSize,
-                              color: darkMode ? Colors.green : Colors.grey),
+                              color: darkMode
+                                  ? Color(0xffFF9800)
+                                  : Color(0xff388E3C)),
                         )
                       ],
                     ),
@@ -229,8 +233,8 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                             color: textColor != null
                                 ? textColor
                                 : darkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? Color(0xffBDBDBD)
+                                    : Color(0xff9C27B0),
                             fontSize: 21),
                       )
                     : Icon(
@@ -260,7 +264,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
               child: Text(
                 '$title',
                 style: TextStyle(
-                    color: darkMode ? Colors.white : Colors.black,
+                    color: darkMode ? Color(0xffFFB74D) : Color(0xffFF7043),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
@@ -288,11 +292,11 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Icon(
             Icons.wb_sunny,
-            color: darkMode ? Colors.grey : Colors.redAccent,
+            color: darkMode ? Color(0xffFFA000) : Color(0xffFFD600),
           ),
           Icon(
             Icons.nightlight_round,
-            color: darkMode ? Colors.green : Colors.grey,
+            color: darkMode ? Color(0xffFFFFFF) : Color(0xff607D8B),
           ),
         ]),
       ),
@@ -348,14 +352,15 @@ class _NeuContainerState extends State<NeuContainer> {
                     BoxShadow(
                       color:
                           darkMode ? Colors.black54 : Colors.blueGrey.shade200,
-                      offset: Offset(4.0, 4.0),
+                      offset: Offset(1.0, 1.0),
                       blurRadius: 15.0,
                       spreadRadius: 1.0,
                     ),
                     BoxShadow(
-                        color:
-                            darkMode ? Colors.blueGrey.shade700 : Colors.white,
-                        offset: Offset(-4.0, -4.0),
+                        color: darkMode
+                            ? Colors.blueGrey.shade700
+                            : Colors.white30,
+                        offset: Offset(-3.5, -3.5),
                         blurRadius: 15.0,
                         spreadRadius: 1.0)
                   ]),
