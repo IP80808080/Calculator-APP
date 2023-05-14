@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,13 +31,34 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   var input = '';
   var output = '';
   var operation = '';
+
+  onButtonClick(value) {
+    if (value == 'C') {
+      input = '';
+      output = '';
+    } else if (value == Icons.backspace_outlined) {
+      input = input.substring(0, input.length - 1);
+    } else if (value == '=') {
+      var userInput = input;
+      userInput = input.replaceAll('x', "*");
+      Parser p = Parser();
+      Expression expression = p.parse(userInput);
+      ContextModel cm = ContextModel();
+      var finalValue = expression.evaluate(EvaluationType.REAL, cm);
+      output = finalValue.toString();
+    } else {
+      input = input + value;
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: darkMode ? colorDark : colorLight,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: EdgeInsets.all(18),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -51,19 +73,19 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                           });
                         },
                         child: _switchMode()),
-                    SizedBox(height: 80),
+                    SizedBox(height: 55),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        'Input',
+                        input,
                         style: TextStyle(
-                            fontSize: 55,
+                            fontSize: 50,
                             fontWeight: FontWeight.bold,
                             color: darkMode ? Colors.white : Colors.red),
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,13 +93,13 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                         Text(
                           '=',
                           style: TextStyle(
-                              fontSize: 35,
+                              fontSize: 30,
                               color: darkMode ? Colors.green : Colors.grey),
                         ),
                         Text(
-                          'Output',
+                          output,
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 40,
                               color: darkMode ? Colors.green : Colors.grey),
                         )
                       ],
@@ -150,7 +172,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buttonRounded(title: '0'),
-                      _buttonRounded(title: ','),
+                      _buttonRounded(title: '.'),
                       _buttonRounded(
                           icon: Icons.backspace_outlined,
                           iconColor:
@@ -176,31 +198,34 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
       Color? iconColor,
       Color? textColor}) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(5),
       child: NeuContainer(
         darkMode: darkMode,
         borderRadius: BorderRadius.circular(40),
         padding: EdgeInsets.all(padding),
         child: Container(
-          width: padding * 2,
-          height: padding * 2,
-          child: Center(
-              child: title != null
-                  ? Text(
-                      '$title',
-                      style: TextStyle(
-                          color: textColor != null
-                              ? textColor
-                              : darkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                          fontSize: 30),
-                    )
-                  : Icon(
-                      icon,
-                      color: iconColor,
-                      size: 30,
-                    )),
+          width: 35,
+          height: 35,
+          child: TextButton(
+            onPressed: () => onButtonClick(title),
+            child: Center(
+                child: title != null
+                    ? Text(
+                        '$title',
+                        style: TextStyle(
+                            color: textColor != null
+                                ? textColor
+                                : darkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                            fontSize: 21),
+                      )
+                    : Icon(
+                        icon,
+                        color: iconColor,
+                        size: 21,
+                      )),
+          ),
         ),
       ),
     );
@@ -208,21 +233,30 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
 
   Widget _buttonOval({String? title, double padding = 17}) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 4),
       child: NeuContainer(
         darkMode: darkMode,
         borderRadius: BorderRadius.circular(50),
-        padding:
-            EdgeInsets.symmetric(horizontal: padding, vertical: padding / 2),
-        child: Container(
-          width: padding * 2,
-          child: Center(
-            child: Text(
-              '$title',
-              style: TextStyle(
-                  color: darkMode ? Colors.white : Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
+        padding: EdgeInsets.symmetric(horizontal: 17, vertical: padding / 2),
+        child: Expanded(
+          child: Container(
+            width: 35,
+            height: 35,
+            child: TextButton(
+              onPressed: () => onButtonClick(title),
+              child: Text(
+                '$title',
+                style: TextStyle(
+                    color: darkMode ? Colors.white : Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(
+                    Size(0, 35),
+                  ),
+                  padding: MaterialStateProperty.all(
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 0))),
             ),
           ),
         ),
